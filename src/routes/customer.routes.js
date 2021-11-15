@@ -12,7 +12,28 @@ const router = express.Router();
 class CustomersRoutes{
 
     constructor() {
-        router.post('/',);
+        router.post('/', customerValidator.complete(), validator, this.post);
+    }
+
+    async post(req, res, next) {
+        try {
+            const newCustomer = req.body;
+
+            let customerAdded = await customerRepository.create(newCustomer);
+            customerAdded = customerAdded.toObject({getters:false, virtuals:false});
+            customerAdded = customerRepository.transform(customerAdded);
+
+            res.header('location', customerAdded.href);
+
+            if(req.query._body === 'false') { 
+                return res.status(httpStatus.NO_CONTENT).end();
+            }
+            
+            //TODO: valider si 200 est voulu
+            res.status(httpStatus.OK).json(customerAdded);
+        } catch(err) {
+            return next(err);
+        }
     }
 }
 

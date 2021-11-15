@@ -69,7 +69,7 @@ class PizzeriasRoutes{
                 delete response._links.next;
             }
 
-            res.status(200).json(response);
+            res.status(httpStatus.OK).json(response);
 
         } catch(err) {
             return next(err);
