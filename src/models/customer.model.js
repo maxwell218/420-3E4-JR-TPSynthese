@@ -1,16 +1,20 @@
 import mongoose from 'mongoose';
-
-{ "_id": { "$oid": "5fc125a21633312494c41fee" }, 
-"name": "Ambra Thibodeau", 
-"planet": "Ninia", 
-"coord": { "lat": "-94.709", "lon": "235.214" }, 
-"referalCode": "wohGhiRe2ah", "email": "AmbraThibodeau@dayrep.com", "phone": "99DED6D8CAFF381E", "birthday": "1951-06-14" },
-
+import PLANET_NAMES from '../libs/constants.js';
 
 const customerSchema = mongoose.Schema({
     name:{type: String, required:true},
     email:{type: String, unique:true, required:true},
-    planet:{type:}
+    planet:{type:String, enum:PLANET_NAMES},    //TODO: Valider que enum est bien appelé (probablement pas)
+    coord:{
+        lat:{type:Number, min:-1000, max:1000, required:true},
+        lon:{type:Number, min:-1000, max:1000, required:true}
+    },
+    phone:{type:String, required:true}, //TODO: Valider si type hexa existe
+    birthday:{type:Date,required:true}, //TODO: Valider si doit être à now par défaut
+    referalCode:{type:String}
 },{
-
+    collection:'customers',
+    strict:'throw'
 });
+
+export default mongoose.model('Customers', customerSchema);
