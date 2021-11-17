@@ -35,7 +35,7 @@ class PizzeriasRoutes {
 
             const filter = {};
             if (req.query.speciality) {
-                filter.chef.speciality = req.query.speciality;
+                filter.speciality = req.query.speciality;
             }
 
             let [pizzerias, documentsCount] = await pizzeriaRepository.retrieveAll(retrieveOptions, filter);
@@ -49,6 +49,11 @@ class PizzeriasRoutes {
             const totalPages = Math.ceil(documentsCount / req.query.limit);
             const hasNextPage = (paginate.hasNextPages(req))(totalPages);
             const pageArray = paginate.getArrayPages(req)(3, totalPages, req.query.page);
+
+            if(filter.speciality)
+            {
+                console.log("TESSSTTT");
+            }
 
             const response = {
                 _metadata: {
