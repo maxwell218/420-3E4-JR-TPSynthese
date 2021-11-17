@@ -4,7 +4,7 @@ import objectToDotNotation from '../libs/objectToDotNotation.js';
 
 class OrderRepository{
     retrieveAll(retrieveOptions) {
-        const retrieveQuery = Order.find().skip(retrieveOptions.page).limit(retrieveOptions.limit);
+        const retrieveQuery = Order.find().skip(retrieveOptions.skip).limit(retrieveOptions.limit);
         const countQuery = Order.countDocuments();
 
         return Promise.all([retrieveQuery, countQuery]);
