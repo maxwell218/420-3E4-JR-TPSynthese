@@ -29,8 +29,7 @@ class CustomersRoutes{
                 return res.status(httpStatus.NO_CONTENT).end();
             }
             
-            //TODO: valider si 200 est voulu
-            res.status(httpStatus.OK).json(customerAdded);
+            res.status(httpStatus.CREATED).json(customerAdded);
         } catch(err) {
             return next(err);
         }
