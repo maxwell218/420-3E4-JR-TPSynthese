@@ -13,12 +13,29 @@ class PizzeriasRoutes {
 
     constructor() {
         router.get('/', paginate.middleware(25, 50), this.getAll);
+        router.get('/:pizzeriaId', this.getOne);
     }
 
     async getOne(req, res, next) {
+        const retrieveOptions={};
+        const transformOptions = { embed:{}};
+
+        if(req.query.embed && req.query.embed === 'orders'){
+            retrieveOptions.orders = true;
+            transformOptions.embed.orders = true;
+        }
+
         try {
-            const retrieveOptions={};
-            const transformOptions = { embed:{}};
+            const idPizzeria = req.params.pizzeriaId;
+            let pizzeria = await pizzeriaRepository.retrieveById(idPizzeria,retrieveOptions);
+
+            if(!pizzeria){
+                return next(httpError.NotFound());
+            }
+            pizzeria = pizzeria.toObject({getters:false, virtuals:true});
+            pizzeria = pizzeriaRepository.transform(pizzeria, transformOptions);
+
+            res.status(httpStatus.OK).json(pizzeria);
 
         } catch (err) {
             return next(err);

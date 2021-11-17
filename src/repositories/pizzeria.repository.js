@@ -23,6 +23,15 @@ class PizzeriaRepository{
         return Promise.all([retrieveQuery, countQuery]);
     }
 
+    retrieveById(idPizzeria, retrieveOptions){
+        const retrieveQuery = Pizzeria.findById(idPizzeria);
+
+        if(retrieveOptions.orders){
+            retrieveQuery.populate('orders');
+        }
+        return retrieveQuery;
+    }
+
     transform(pizzeria, transformOptions = {}) {
 
         pizzeria.href = `/pizzerias/${pizzeria._id}`;
