@@ -39,7 +39,7 @@ class PizzeriasRoutes {
 
         } catch (err) {
             return next(err);
-        }
+        }        
     }
 
     async getAll(req, res, next) {
