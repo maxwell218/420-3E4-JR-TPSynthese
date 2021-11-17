@@ -23,4 +23,4 @@ const orderSchema = mongoose.Schema({
     strict:'throw'
 });
 
-export default moogoose.model('Order', orderSchema);
+export default mongoose.model('Order', orderSchema);

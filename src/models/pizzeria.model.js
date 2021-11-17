@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import {PLANETS_NAMES, MONSTER_ANCESTORS, PIZZA_TOPPINGS} from '../libs/constants.js';
+import {PLANET_NAMES, MONSTER_ANCESTORS, PIZZA_TOPPINGS} from '../libs/constants.js';
 
 const pizzeriaSchema = mongoose.Schema({
 
-    planet: { type: String, required: true, enum:PLANETS_NAMES },
+    planet: { type: String, required: true, enum:PLANET_NAMES },
     coord: {
         lon: { type: Number, min: -1000, max: 1000, required: true },
         lat: { type: Number, min:-1000, max:1000 ,required: true }
@@ -18,4 +18,4 @@ const pizzeriaSchema = mongoose.Schema({
     strict:'throw'
 });
 
-export default monsgoose.model('Pizzeria', pizzeriaSchema);
+export default mongoose.model('Pizzeria', pizzeriaSchema);
