@@ -13,6 +13,13 @@ class OrderRepository{
     transform(order, transformOptions = {}) {
         order.href = `${process.env.BASE_URL}/pizzerias/${order._id}`;
         delete order._id;
+
+        order.subTotal = 0;
+        order.pizzas.forEach(p => {
+            order.subTotal += p.price;
+        });
+        order.subTotal = parseFloat(order.subTotal.toFixed(3));
+
         return order;
     }
 }
