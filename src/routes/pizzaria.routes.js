@@ -15,6 +15,8 @@ class PizzeriasRoutes{
         router.get('/', paginate.middleware(25,50), this.getAll);
     }
 
+    async getOne()
+
     async getAll(req, res, next) {
         //TODO: changer l'affichage, valider les chefs etc, SB
         try{

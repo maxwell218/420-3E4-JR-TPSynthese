@@ -13,6 +13,9 @@ const pizzeriaSchema = mongoose.Schema({
         ancestor: { type: String, required: true, enum:MONSTER_ANCESTORS},
         speciality: { type: String, required: true, enum:PIZZA_TOPPINGS}
     }
+},{
+    collection:'pizzerias',
+    strict:'throw'
 });
 
 export default monsgoose.model('Pizzeria', pizzeriaSchema);
