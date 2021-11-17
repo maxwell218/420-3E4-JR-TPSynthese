@@ -4,7 +4,9 @@ import database from './libs/database.js';
 
 import errorMiddleware from './middlewares/errors.js';
 
-//IMPORTATIONS DES ROUTES sb
+import pizzeriasRoutes from './routes/pizzaria.routes.js';
+import customersRoutes from './routes/customer.routes.js';
+import ordersRoutes from './routes/order.routes';
 
 database();
 
@@ -18,8 +20,9 @@ app.use((req, res, next) => {
     next();
 });
 
-//AJOUT DES ROUTES
-//app.use('/planets', planetsRoutes);
+app.use('/pizzerias', pizzeriasRoutes);
+app.use('/customers', customersRoutes);
+app.use('/orders', ordersRoutes);
 
 app.use(errorMiddleware);
 
