@@ -18,9 +18,9 @@ class OrderRepository{
     }
 
     transform(order, transformOptions = {}) {
+        order.href = `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}/orders/${order._id}`;
         order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
         order.pizzeria = { href: `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}`};
-        order.href = `${process.env.BASE_URL}/pizzerias/${order._id}`;
         delete order._id;
 
         order.subTotal = 0;

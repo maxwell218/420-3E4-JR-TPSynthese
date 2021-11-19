@@ -84,6 +84,7 @@ class CustomersRoutes {
             const newCustomer = req.body;
 
             let customerAdded = await customerRepository.create(newCustomer);
+
             customerAdded = customerAdded.toObject({ getters: false, virtuals: false });
             customerAdded = customerRepository.transform(customerAdded);
 
@@ -94,6 +95,7 @@ class CustomersRoutes {
             }
 
             res.status(httpStatus.CREATED).json(customerAdded);
+            
         } catch (err) {
             return next(err);
         }
@@ -123,7 +125,30 @@ class CustomersRoutes {
     }
 
     async getOne(req, res, next) {
+        const retrieveOptions = {};
+        const transformOptions = {};
 
+        if (req.query.embed && req.query.embed === 'orders') {
+            retrieveOptions.orders = true;
+            transformOptions.embed = {};
+            transformOptions.embed.orders = true;
+        }
+
+        try {
+            const idCustomer = req.params.idCustomer;
+            let customer = await customerRepository.retrieveById(idCustomer, retrieveOptions);
+
+            if (!customer) {
+                return next(HttpError.NotFound());
+            }
+
+            customer = customer.toObject({getters:false, virtuals:true});
+            customer = customerRepository.transform(customer, transformOptions);
+
+            res.status(httpStatus.OK).json(customer);
+        } catch (err) {
+            return next(err);
+        }
     }
 
 }

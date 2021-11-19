@@ -17,4 +17,11 @@ const customerSchema = mongoose.Schema({
     strict:'throw'
 });
 
+customerSchema.virtual('orders', {
+    ref: 'Order',
+    foreignField:'customer',
+    localField:'_id',
+    justOne:false
+});
+
 export default mongoose.model('Customer', customerSchema);
