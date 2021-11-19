@@ -14,6 +14,25 @@ class CustomersRoutes {
     constructor() {
         router.post('/', customerValidator.complete(), validator, this.post);
         router.put('/:idCustomer', customerValidator.complete() , validator ,this.put);
+        router.get('/', this.getAll);
+        router.get('/:idCustomer', this.getOne);
+
+    }
+
+    async getAll(req, res, next){
+        try{
+            const retrieveOptions = {
+                skip: req.skip,
+                limit: req.query.limit
+            };
+            let [customers, documentsCount] = await customerRepository.retrieveAll(retrieveOptions);
+
+
+
+
+        }catch(err){
+            return next(err);
+        }
 
     }
 
@@ -50,7 +69,7 @@ class CustomersRoutes {
             if (req.query._body && req.query._body == 'false') {
                 return res.status(httpStatus.NO_CONTENT).end();
             } else {
-                
+
                 customer = customer.toObject({ getters: false, virutals: false });
                 customer = customerRepository.transform(customer);
 
@@ -62,6 +81,9 @@ class CustomersRoutes {
         }
     }
 
+    async getOne(req, res, next) {
+
+    }
 
 }
 
