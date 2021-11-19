@@ -13,16 +13,33 @@ class PizzeriasRoutes {
 
     constructor() {
         router.get('/', paginate.middleware(25, 50), this.getAll);
+        router.get('/:pizzeriaId', this.getOne);
     }
 
     async getOne(req, res, next) {
+        const retrieveOptions={};
+        const transformOptions = { embed:{}};
+
+        if(req.query.embed && req.query.embed === 'orders'){
+            retrieveOptions.orders = true;
+            transformOptions.embed.orders = true;
+        }
+
         try {
-            const retrieveOptions={};
-            const transformOptions = { embed:{}};
+            const idPizzeria = req.params.pizzeriaId;
+            let pizzeria = await pizzeriaRepository.retrieveById(idPizzeria,retrieveOptions);
+
+            if(!pizzeria){
+                return next(httpError.NotFound());
+            }
+            pizzeria = pizzeria.toObject({getters:false, virtuals:true});
+            pizzeria = pizzeriaRepository.transform(pizzeria, transformOptions);
+
+            res.status(httpStatus.OK).json(pizzeria);
 
         } catch (err) {
             return next(err);
-        }
+        }        
     }
 
     async getAll(req, res, next) {
@@ -35,7 +52,7 @@ class PizzeriasRoutes {
 
             const filter = {};
             if (req.query.speciality) {
-                filter.chef.speciality = req.query.speciality;
+                filter.speciality = req.query.speciality;
             }
 
             let [pizzerias, documentsCount] = await pizzeriaRepository.retrieveAll(retrieveOptions, filter);
@@ -49,6 +66,11 @@ class PizzeriasRoutes {
             const totalPages = Math.ceil(documentsCount / req.query.limit);
             const hasNextPage = (paginate.hasNextPages(req))(totalPages);
             const pageArray = paginate.getArrayPages(req)(3, totalPages, req.query.page);
+
+            if(filter.speciality)
+            {
+                console.log("TESSSTTT");
+            }
 
             const response = {
                 _metadata: {

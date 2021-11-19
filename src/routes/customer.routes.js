@@ -9,10 +9,12 @@ import validator from '../middlewares/validator.js';
 
 const router = express.Router();
 
-class CustomersRoutes{
+class CustomersRoutes {
 
     constructor() {
         router.post('/', customerValidator.complete(), validator, this.post);
+        router.put('/:idCustomer', this.put);
+
     }
 
     async post(req, res, next) {
@@ -20,21 +22,44 @@ class CustomersRoutes{
             const newCustomer = req.body;
 
             let customerAdded = await customerRepository.create(newCustomer);
-            customerAdded = customerAdded.toObject({getters:false, virtuals:false});
+            customerAdded = customerAdded.toObject({ getters: false, virtuals: false });
             customerAdded = customerRepository.transform(customerAdded);
 
             res.header('location', customerAdded.href);
 
-            if(req.query._body === 'false') { 
+            if (req.query._body === 'false') {
                 return res.status(httpStatus.NO_CONTENT).end();
             }
-            
-            //TODO: valider si 200 est voulu
-            res.status(httpStatus.OK).json(customerAdded);
-        } catch(err) {
+
+            res.status(httpStatus.CREATED).json(customerAdded);
+        } catch (err) {
             return next(err);
         }
     }
+
+    async put(req, res, next) {
+        try {
+            let customer = await customerRepository.update(req.params.idCustomer, req.body);
+
+            if (!customer) {
+                return next(httpError.NotFound(`Le customer avec l'id: ${req.params.idCustomer} n'existe pas.`))
+            }
+
+            if (req.query._body && req.query._body == 'false') {
+                return res.status(httpStatus.NO_CONTENT).end();
+            } else {
+                customer = customer.toObject({ getters: false, virutals: false });
+                customer = customerRepository.transform(customer);
+
+                return res.status(httpStatus.CREATED).json(customer)
+            }
+        } catch (err) {
+
+            return next(err);
+        }
+    }
+
+
 }
 
 new CustomersRoutes();
