@@ -16,6 +16,9 @@ class CustomerRepository{
         const customerToDotNotation = objectToDotNotation(customerModifs);
         return Customer.findByIdAndUpdate(idCustomer, objectToDotNotation(customerModifs), {new:true});
     }
+    retrieveAll(retrieveOptions, filter = {}){
+
+    }
 }
 
 export default new CustomerRepository();
