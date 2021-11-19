@@ -20,7 +20,19 @@ class CustomersRoutes {
     }
 
     async getAll(req, res, next){
+        try{
+            const retrieveOptions = {
+                skip: req.skip,
+                limit: req.query.limit
+            };
+            let [customers, documentsCount] = await customerRepository.retrieveAll(retrieveOptions);
 
+
+
+
+        }catch(err){
+            return next(err);
+        }
 
     }
 
