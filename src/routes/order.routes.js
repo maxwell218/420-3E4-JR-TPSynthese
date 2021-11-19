@@ -68,7 +68,7 @@ class OrdersRoutes{
                 delete response._links.next;
             }
             
-            res.status(httpStatus.OK).json(orders);
+            res.status(httpStatus.OK).json(response);
         } catch (err) {
             return next(err);
         }

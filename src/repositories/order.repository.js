@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import Order from '../models/order.model.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
+import { parse } from 'dotenv-flow';
 
 class OrderRepository{
     retrieveAll(retrieveOptions, filter = {}) {
@@ -17,6 +18,8 @@ class OrderRepository{
     }
 
     transform(order, transformOptions = {}) {
+        order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
+        order.pizzeria = { href: `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}`};
         order.href = `${process.env.BASE_URL}/pizzerias/${order._id}`;
         delete order._id;
 
@@ -25,6 +28,10 @@ class OrderRepository{
             order.subTotal += p.price;
         });
         order.subTotal = parseFloat(order.subTotal.toFixed(3));
+
+        order.taxeRates = 0.87 / 100;
+        order.taxes = parseFloat((order.subTotal*order.taxeRates).toFixed(3));
+        order.total = order.subTotal + order.taxes;
 
         return order;
     }
