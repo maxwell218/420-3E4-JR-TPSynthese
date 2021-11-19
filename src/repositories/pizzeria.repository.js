@@ -11,13 +11,13 @@ class PizzeriaRepository{
         if(filter.speciality)
         {
             retrieveQuery = Pizzeria.find({'chef.speciality':filter.speciality}).skip(retrieveOptions.skip).limit(retrieveOptions.limit);
-            //countQuery = Pizzeria.countDocuments({'chef.speciality':filter.speciality});
+            countQuery = Pizzeria.countDocuments({'chef.speciality':filter.speciality});
         }
         else
         {
             retrieveQuery = Pizzeria.find().skip(retrieveOptions.skip).limit(retrieveOptions.limit);
+            countQuery = Pizzeria.countDocuments();
         }
-        countQuery = Pizzeria.countDocuments();
         
 
         return Promise.all([retrieveQuery, countQuery]);
