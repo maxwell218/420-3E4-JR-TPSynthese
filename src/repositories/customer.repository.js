@@ -11,6 +11,11 @@ class CustomerRepository{
 
         return customer;
     }
+
+    update(idCustomer, customerModifs){
+        const customerToDotNotation = objectToDotNotation(customerModifs);
+        return Customer.findByIdAndUpdate(idCustomer, objectToDotNotation(customerModifs), {new:true});
+    }
 }
 
 export default new CustomerRepository();
