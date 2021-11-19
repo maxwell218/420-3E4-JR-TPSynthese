@@ -82,7 +82,30 @@ class CustomersRoutes {
     }
 
     async getOne(req, res, next) {
+        const retrieveOptions = {};
+        const transformOptions = {};
 
+        if (req.query.embed && req.query.embed === 'orders') {
+            retrieveOptions.orders = true;
+            transformOptions.embed = {};
+            transformOptions.embed.orders = true;
+        }
+
+        try {
+            const idCustomer = req.params.idCustomer;
+            let customer = await customerRepository.retrieveById(idCustomer, retrieveOptions);
+
+            if (!customer) {
+                return next(HttpError.NotFound());
+            }
+
+            customer = customer.toObject({getters:false, virtuals:true});
+            customer = customerRepository.transform(customer, transformOptions);
+
+            res.status(httpStatus.OK).json(customer);
+        } catch (err) {
+            return next(err);
+        }
     }
 
 }
