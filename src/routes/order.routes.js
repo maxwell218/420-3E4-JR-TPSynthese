@@ -21,8 +21,13 @@ class OrdersRoutes{
             topping:req.topping,
         }
 
+        const filter = {};
+        if (req.query.topping) {
+            filter.topping = req.query.topping;
+        }
+
         try {
-            let [orders, documentsCount] = await orderRepository.retrieveAll(retrieveOptions);
+            let [orders, documentsCount] = await orderRepository.retrieveAll(retrieveOptions, filter);
             
             orders = orders.map(o => {
                 o = o.toObject({getters:false, virtuals:false});
@@ -63,7 +68,7 @@ class OrdersRoutes{
                 delete response._links.next;
             }
             
-            res.status(httpStatus.OK).json(orders);
+            res.status(httpStatus.OK).json(response);
         } catch (err) {
             return next(err);
         }
