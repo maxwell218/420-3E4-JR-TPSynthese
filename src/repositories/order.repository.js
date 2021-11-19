@@ -3,9 +3,15 @@ import Order from '../models/order.model.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
 
 class OrderRepository{
-    retrieveAll(retrieveOptions) {
-        const retrieveQuery = Order.find().skip(retrieveOptions.skip).limit(retrieveOptions.limit);
+    retrieveAll(retrieveOptions, filter = {}) {
+        let retrieveQuery;
         const countQuery = Order.countDocuments();
+
+        if (filter.topping) {
+            retrieveQuery = Order.find({'pizzas.toppings' : { $in : [filter.topping]}}).skip(retrieveOptions.skip).limit(retrieveOptions.limit);
+        } else {
+            retrieveQuery = Order.find().skip(retrieveOptions.skip).limit(retrieveOptions.limit);
+        }
 
         return Promise.all([retrieveQuery, countQuery]);
     }
