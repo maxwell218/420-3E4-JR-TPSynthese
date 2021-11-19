@@ -33,10 +33,10 @@ class CustomerRepository{
         const customerToDotNotation = objectToDotNotation(customerModifs);
         return Customer.findByIdAndUpdate(idCustomer, objectToDotNotation(customerModifs), {new:true});
     }
-<<<<<<< HEAD
-    retrieveAll(retrieveOptions, filter = {}){
 
-=======
+    retrieveAll(){
+        
+    }
 
     retrieveById(idCustomer, retrieveOptions) {
         const retrieveQuery = Customer.findById(idCustomer);
@@ -46,7 +46,6 @@ class CustomerRepository{
         }
         
         return retrieveQuery;
->>>>>>> 091294c74e931fe45a6c9a3fdad65be677a9760a
     }
 }
 
