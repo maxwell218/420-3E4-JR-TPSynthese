@@ -67,8 +67,9 @@ class CustomersRoutes {
         }
     }
 
-    
-    
+    async getOne(req, res, next) {
+
+    }
 
 }
 
