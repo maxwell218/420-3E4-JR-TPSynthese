@@ -22,6 +22,7 @@ class CustomersRoutes {
             const newCustomer = req.body;
 
             let customerAdded = await customerRepository.create(newCustomer);
+
             customerAdded = customerAdded.toObject({ getters: false, virtuals: false });
             customerAdded = customerRepository.transform(customerAdded);
 
@@ -32,6 +33,7 @@ class CustomersRoutes {
             }
 
             res.status(httpStatus.CREATED).json(customerAdded);
+            
         } catch (err) {
             return next(err);
         }
