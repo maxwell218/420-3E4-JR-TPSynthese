@@ -14,6 +14,13 @@ class CustomersRoutes {
     constructor() {
         router.post('/', customerValidator.complete(), validator, this.post);
         router.put('/:idCustomer', customerValidator.complete() , validator ,this.put);
+        router.get('/', this.getAll);
+        router.get('/:idCustomer', this.getOne);
+
+    }
+
+    async getAll(req, res, next){
+
 
     }
 
@@ -48,7 +55,7 @@ class CustomersRoutes {
             if (req.query._body && req.query._body == 'false') {
                 return res.status(httpStatus.NO_CONTENT).end();
             } else {
-                
+
                 customer = customer.toObject({ getters: false, virutals: false });
                 customer = customerRepository.transform(customer);
 
