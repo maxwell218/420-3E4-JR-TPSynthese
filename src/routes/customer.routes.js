@@ -20,7 +20,19 @@ class CustomersRoutes {
     }
 
     async getAll(req, res, next){
+        try{
+            const retrieveOptions = {
+                skip: req.skip,
+                limit: req.query.limit
+            };
+            let [customers, documentsCount] = await customerRepository.retrieveAll(retrieveOptions);
 
+
+
+
+        }catch(err){
+            return next(err);
+        }
 
     }
 
@@ -29,6 +41,7 @@ class CustomersRoutes {
             const newCustomer = req.body;
 
             let customerAdded = await customerRepository.create(newCustomer);
+
             customerAdded = customerAdded.toObject({ getters: false, virtuals: false });
             customerAdded = customerRepository.transform(customerAdded);
 
@@ -39,6 +52,7 @@ class CustomersRoutes {
             }
 
             res.status(httpStatus.CREATED).json(customerAdded);
+            
         } catch (err) {
             return next(err);
         }

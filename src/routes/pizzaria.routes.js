@@ -66,12 +66,7 @@ class PizzeriasRoutes {
             const totalPages = Math.ceil(documentsCount / req.query.limit);
             const hasNextPage = (paginate.hasNextPages(req))(totalPages);
             const pageArray = paginate.getArrayPages(req)(3, totalPages, req.query.page);
-
-            if(filter.speciality)
-            {
-                console.log("TESSSTTT");
-            }
-            console.log(totalPages);
+            
             const response = {
                 _metadata: {
                     hasNextPage,
