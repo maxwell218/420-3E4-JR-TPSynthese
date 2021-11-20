@@ -3,7 +3,7 @@ import httpError from 'http-errors';
 import httpStatus from 'http-status';
 import paginate from 'express-paginate';
 
-import customerRepository from '../repositories/customer.repository.js';
+import customerRepository from '../repositories/customers.repository.js';
 import customerValidator from '../validators/customer.validator.js';
 import validator from '../middlewares/validator.js';
 

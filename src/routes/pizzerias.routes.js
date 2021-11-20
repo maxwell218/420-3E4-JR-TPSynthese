@@ -3,7 +3,7 @@ import httpError from 'http-errors';
 import httpStatus from 'http-status';
 import paginate from 'express-paginate';
 
-import pizzeriaRepository from '../repositories/pizzeria.repository.js';
+import pizzeriaRepository from '../repositories/pizzerias.repository.js';
 import pizzeriaValidator from '../validators/pizzeria.validator.js';
 import validator from '../middlewares/validator.js';
 import paginatedResponse from '../libs/paginatedResponse.js';

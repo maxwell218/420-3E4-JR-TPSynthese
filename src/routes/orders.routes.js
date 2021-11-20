@@ -3,7 +3,7 @@ import httpError from 'http-errors';
 import httpStatus from 'http-status';
 import paginate from 'express-paginate';
 
-import orderRepository from '../repositories/order.repository.js';
+import ordersRepository from '../repositories/orders.repository.js';
 import paginatedResponse from '../libs/paginatedResponse.js';
 
 const router = express.Router();
@@ -11,7 +11,8 @@ const router = express.Router();
 class OrdersRoutes{
 
     constructor() {
-        router.get('/', paginate.middleware(10, 30), this.getAll)
+        router.get('/', paginate.middleware(10, 30), this.getAll);
+        router.get('/:idOrder', this.getOneFromSpecificPizzeria);
     }
 
     async getAll(req, res, next) {
@@ -28,11 +29,11 @@ class OrdersRoutes{
         }
 
         try {
-            let [orders, documentsCount] = await orderRepository.retrieveAll(retrieveOptions, filter);
+            let [orders, documentsCount] = await ordersRepository.retrieveAll(retrieveOptions, filter);
             
             orders = orders.map(o => {
                 o = o.toObject({getters:false, virtuals:false});
-                o = orderRepository.transform(o);
+                o = ordersRepository.transform(o);
                 return o;
             });
 
@@ -56,12 +57,19 @@ class OrdersRoutes{
         }
     }
 
-    async getOneOrderFromOnePizzeria(req, res, next) {
+    async getOneFromSpecificPizzeria(req, res, next) {
         try {
+            // const retrieveOptions = {};
+            // const transformOptions = { embed:{}};
 
-            //let order = await 
+            // if(req.query.embed && req.query.embed === 'customer') {
+            //     retrieveOptions.customer = true;
+            //     transformOptions.embed.planet = true;
+            // }
+
+            // let order = await ordersRepository.RetrieveById(req.params.idOrder, retrieveOptions);
             
-            //if(!)
+            // if(!order || order.pi)
             res.status(httpStatus.OK).json(response);
         } catch(err)
         {
