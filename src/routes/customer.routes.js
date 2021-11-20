@@ -28,7 +28,17 @@ class CustomersRoutes {
             let [customers, documentsCount] = await customerRepository.retrieveAll(retrieveOptions);
 
 
-
+            // const totalPages = Math.ceil(documentsCount / req.query.limit);
+            // const pagination = {
+            //     totalPages,
+            //     hasNextPage: (paginate.hasNextPages(req))(totalPages),
+            //     pageArray: paginate.getArrayPages(req)(3, totalPages, req.query.page),
+            //     page: req.query.page,
+            //     limit: req.query.limit,
+            //     skip: req.skip,
+            //     totalDocuments: documentsCount
+            // }
+            // const response = paginatedResponse(customers, pagination );
 
         }catch(err){
             return next(err);

@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import paginate from 'express-paginate';
 
 import orderRepository from '../repositories/order.repository.js';
+import paginatedResponse from '../libs/paginatedResponse.js';
 
 const router = express.Router();
 
@@ -36,37 +37,18 @@ class OrdersRoutes{
             });
 
             const totalPages = Math.ceil(documentsCount/req.query.limit);
-            const hasNextPage = (paginate.hasNextPages(req))(totalPages);
-            const pageArray = paginate.getArrayPages(req)(3, totalPages, req.query.page);
 
-            const response = {
-                _metadata: {
-                    hasNextPage,
-                    page: req.query.page,
-                    limit: req.query.limit,
-                    skip: req.skip,
-                    totalPages,
-                    totalDocuments: documentsCount
-                },
-                _links: {
-                    prev: pageArray[0].url,
-                    self: pageArray[1].url,
-                    next: pageArray[2].url
-                },
-                data: orders
-            };
-
-            if (req.query.page === 1) {
-                delete response._links.prev;
-                response._links.self = pageArray[0].url;
-                response._links.next = pageArray[1].url;
+            const pagination = {
+                totalPages,
+                hasNextPage: (paginate.hasNextPages(req))(totalPages),
+                pageArray: paginate.getArrayPages(req)(3, totalPages, req.query.page),
+                page: req.query.page,
+                limit: req.query.limit,
+                skip: req.skip,
+                totalDocuments: documentsCount
             }
-
-            if (!hasNextPage) {
-                response._links.prev = pageArray[1].url;
-                response._links.self = pageArray[2].url;
-                delete response._links.next;
-            }
+            
+            const response = paginatedResponse(orders, pagination);
             
             res.status(httpStatus.OK).json(response);
         } catch (err) {
@@ -74,6 +56,18 @@ class OrdersRoutes{
         }
     }
 
+    async getOneOrderFromOnePizzeria(req, res, next) {
+        try {
+
+            //let order = await 
+            
+            //if(!)
+            res.status(httpStatus.OK).json(response);
+        } catch(err)
+        {
+            return next(err);
+        }
+    }
 }
 
 new OrdersRoutes();

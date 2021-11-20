@@ -44,7 +44,7 @@ class PizzeriasRoutes {
     }
 
     async getAll(req, res, next) {
-        //TODO: changer l'affichage, valider les chefs etc, SB
+
         try {
             const retrieveOptions = {
                 skip: req.skip,
