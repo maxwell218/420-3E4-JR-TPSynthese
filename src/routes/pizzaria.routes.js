@@ -65,51 +65,19 @@ class PizzeriasRoutes {
             });
 
             const totalPages = Math.ceil(documentsCount / req.query.limit);
-            const hasNextPage = (paginate.hasNextPages(req))(totalPages);
-            const pageArray = paginate.getArrayPages(req)(3, totalPages, req.query.page);
 
-            const response = paginatedResponse(pizzerias, totalPages, hasNextPage, pageArray );
-            // const totalPages = Math.ceil(documentsCount / req.query.limit);
-            // const hasNextPage = (paginate.hasNextPages(req))(totalPages);
-            // const pageArray = paginate.getArrayPages(req)(3, totalPages, req.query.page);
+            const pagination = {
+                totalPages,
+                hasNextPage: (paginate.hasNextPages(req))(totalPages),
+                pageArray: paginate.getArrayPages(req)(3, totalPages, req.query.page),
+                page: req.query.page,
+                limit: req.query.limit,
+                skip: req.skip,
+                totalDocuments: documentsCount
+            }
 
-            // const response = {
-            //     _metadata: {
-            //         hasNextPage,
-            //         page: req.query.page,
-            //         limit: req.query.limit,
-            //         skip: req.skip,
-            //         totalPages,
-            //         totalDocuments: documentsCount
-            //     },
-            //     _links: {
-            //         prev: (totalPages >2?pageArray[0].url:undefined),
-            //         self: (totalPages >2?pageArray[1].url:pageArray[0].url),
-            //         next: (totalPages>2?pageArray[2].url:undefined)
-            //     },
-            //     data: pizzerias
-            // };
-
-            // if(totalPages > 1)
-            // {
-            //     if (req.query.page === 1) {
-            //         delete response._links.prev;
-            //         response._links.self = pageArray[0].url;
-            //         response._links.next = pageArray[1].url;
-            //     }
-
-            //     if (!hasNextPage) {
-            //         response._links.prev = (totalPages>2?pageArray[1].url:pageArray[0].url);
-            //         response._links.self = (totalPages>2?pageArray[2].url:pageArray[1].url);
-            //         delete response._links.next;
-            //     }
-            // }
-            // else
-            // {
-            //     delete response._links.prev;
-            //     delete response._links.next;
-            // }
-
+            const response = paginatedResponse(pizzerias, pagination );
+            
             res.status(httpStatus.OK).json(response);
 
         } catch (err) {
