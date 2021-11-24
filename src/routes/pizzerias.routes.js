@@ -16,7 +16,7 @@ class PizzeriasRoutes {
         router.get('/', paginate.middleware(25, 50), this.getAll);
         router.get('/:pizzeriaId', this.getOne);
         router.get('/:pizzeria/orders/:idOrder', this.getOneOrderFromSpecificPizzeria);
-        router.post('/', this.post)
+        router.post('/', pizzeriaValidator.complete(), validator, this.post);
     }
 
     async getOne(req, res, next) {
@@ -88,7 +88,28 @@ class PizzeriasRoutes {
     }
 
     async post(req, res, next) {
-        
+        const newPizzeria = req.body;
+
+        if (Object.keys(newPizzeria).length === 0) {
+            return next(httpError.BadRequest('La pizzeria ne peut pas contenir aucune donnée.'));
+        }
+
+        try {
+            let pizzeria = await pizzeriaRepository.create(newPizzeria);
+
+            pizzeria = pizzeria.toObject({getters:false, virtuals:false});
+            pizzeria = pizzeriaRepository.transform(pizzeria);
+            res.header('location', pizzeria.href);
+
+            if (req.query._body === 'false') {
+                return res.status(httpStatus.CREATED).end();
+            }
+
+            res.status(httpStatus.CREATED).json(pizzeria);
+
+        } catch(err) {
+            return next(err);
+        }
     }
 
     async getOneOrderFromSpecificPizzeria(req, res, next) {

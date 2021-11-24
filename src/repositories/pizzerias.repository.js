@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import Pizzeria from '../models/pizzeria.model.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
-import ordersRepository from './orders.repository.js';
+import orderRepository from './orders.repository.js';
 
 class PizzeriaRepository{
     retrieveAll(retrieveOptions, filter = {}) {
@@ -33,10 +33,15 @@ class PizzeriaRepository{
         return retrieveQuery;
     }
 
+    create(pizzeria) {
+        return Pizzeria.create(pizzeria);
+    }
+
     transform(pizzeria, transformOptions = {}) {
 
         pizzeria.href = `/pizzerias/${pizzeria._id}`;
         delete pizzeria._id;
+        delete pizzeria.__v;
 
         pizzeria.lightspeed = `[${pizzeria.planet}]@(${pizzeria.coord.lat};${pizzeria.coord.lon})`;
 
