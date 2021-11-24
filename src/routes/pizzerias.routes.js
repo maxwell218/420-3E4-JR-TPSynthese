@@ -15,7 +15,7 @@ class PizzeriasRoutes {
     constructor() {
         router.get('/', paginate.middleware(25, 50), this.getAll);
         router.get('/:pizzeriaId', this.getOne);
-        router.post('/', this.post)
+        router.post('/', pizzeriaValidator.complete(), validator, this.post);
     }
 
     async getOne(req, res, next) {
@@ -98,6 +98,7 @@ class PizzeriasRoutes {
 
             pizzeria = pizzeria.toObject({getters:false, virtuals:false});
             pizzeria = pizzeriaRepository.transform(pizzeria);
+            res.header('location', pizzeria.href);
 
             if (req.query._body === 'false') {
                 return res.status(httpStatus.CREATED).end();
