@@ -3,7 +3,7 @@ import httpError from 'http-errors';
 import httpStatus from 'http-status';
 import paginate from 'express-paginate';
 
-import pizzeriaRepository from '../repositories/pizzeria.repository.js';
+import pizzeriaRepository from '../repositories/pizzerias.repository.js';
 import pizzeriaValidator from '../validators/pizzeria.validator.js';
 import validator from '../middlewares/validator.js';
 import paginatedResponse from '../libs/paginatedResponse.js';
@@ -45,7 +45,7 @@ class PizzeriasRoutes {
     }
 
     async getAll(req, res, next) {
-        //TODO: changer l'affichage, valider les chefs etc, SB
+
         try {
             const retrieveOptions = {
                 skip: req.skip,
@@ -66,6 +66,7 @@ class PizzeriasRoutes {
             });
 
             const totalPages = Math.ceil(documentsCount / req.query.limit);
+<<<<<<< HEAD:src/routes/pizzaria.routes.js
             const hasNextPage = (paginate.hasNextPages(req))(totalPages);
             const pageArray = paginate.getArrayPages(req)(3, totalPages, req.query.page);
 
@@ -103,6 +104,21 @@ class PizzeriasRoutes {
                 delete response._links.prev;
                 delete response._links.next;
             }
+=======
+
+            const pagination = {
+                totalPages,
+                hasNextPage: (paginate.hasNextPages(req))(totalPages),
+                pageArray: paginate.getArrayPages(req)(3, totalPages, req.query.page),
+                page: req.query.page,
+                limit: req.query.limit,
+                skip: req.skip,
+                totalDocuments: documentsCount
+            }
+
+            const response = paginatedResponse(pizzerias, pagination );
+            
+>>>>>>> 9bf12dcb2d926f6261b6865d6a148a928606b3ca:src/routes/pizzerias.routes.js
             res.status(httpStatus.OK).json(response);
         } catch (err) {
             return next(err);

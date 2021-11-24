@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import Customer from '../models/customer.model.js';
-import orderRepository from '../repositories/order.repository.js';
+import orderRepository from './orders.repository.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
 
 class CustomerRepository{

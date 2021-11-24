@@ -3,7 +3,7 @@ import httpError from 'http-errors';
 import httpStatus from 'http-status';
 import paginate from 'express-paginate';
 
-import customerRepository from '../repositories/customer.repository.js';
+import customerRepository from '../repositories/customers.repository.js';
 import customerValidator from '../validators/customer.validator.js';
 import validator from '../middlewares/validator.js';
 
@@ -73,7 +73,19 @@ class CustomersRoutes {
             }
             res.status(httpStatus.OK).json(response);
 
-        } catch (err) {
+            // const totalPages = Math.ceil(documentsCount / req.query.limit);
+            // const pagination = {
+            //     totalPages,
+            //     hasNextPage: (paginate.hasNextPages(req))(totalPages),
+            //     pageArray: paginate.getArrayPages(req)(3, totalPages, req.query.page),
+            //     page: req.query.page,
+            //     limit: req.query.limit,
+            //     skip: req.skip,
+            //     totalDocuments: documentsCount
+            // }
+            // const response = paginatedResponse(customers, pagination );
+
+        }catch(err){
             return next(err);
         }
 

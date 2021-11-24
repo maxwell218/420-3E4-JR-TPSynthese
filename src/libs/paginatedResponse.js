@@ -1,35 +1,33 @@
-import mongoose from 'mongoose';
-import chalk from 'chalk';
 
-export default (data, totalPages, hasNextPage, pageArray) => {
+export default (data, pagination) => {
 
     const response = {
         _metadata: {
-            hasNextPage,
-            page: req.query.page,
-            limit: req.query.limit,
-            skip: req.skip,
-            totalPages,
-            totalDocuments: documentsCount
+            hasNextPage: pagination.hasNextPage,
+            page: pagination.page,
+            limit: pagination.limit,
+            skip: pagination.skip,
+            totalPages: pagination.totalPages,
+            totalDocuments: pagination.totalDocuments
         },
         _links: {
-            prev: (totalPages > 2 ? pageArray[0].url : undefined),
-            self: (totalPages > 2 ? pageArray[1].url : pageArray[0].url),
-            next: (totalPages > 2 ? pageArray[2].url : undefined)
+            prev: (pagination.totalPages > 2 ? pagination.pageArray[0].url : undefined),
+            self: (pagination.totalPages > 2 ? pagination.pageArray[1].url : pagination.pageArray[0].url),
+            next: (pagination.totalPages > 2 ? pagination.pageArray[2].url : undefined)
         },
         data
     };
 
-    if (totalPages > 1) {
-        if (req.query.page === 1) {
+    if (pagination.totalPages > 1) {
+        if (pagination.page === 1) {
             delete response._links.prev;
-            response._links.self = pageArray[0].url;
-            response._links.next = pageArray[1].url;
+            response._links.self = pagination.pageArray[0].url;
+            response._links.next = pagination.pageArray[1].url;
         }
 
-        if (!hasNextPage) {
-            response._links.prev = (totalPages > 2 ? pageArray[1].url : pageArray[0].url);
-            response._links.self = (totalPages > 2 ? pageArray[2].url : pageArray[1].url);
+        if (!pagination.hasNextPage) {
+            response._links.prev = (pagination.totalPages > 2 ? pagination.pageArray[1].url : pagination.pageArray[0].url);
+            response._links.self = (pagination.totalPages > 2 ? pagination.pageArray[2].url : pagination.pageArray[1].url);
             delete response._links.next;
         }
     }

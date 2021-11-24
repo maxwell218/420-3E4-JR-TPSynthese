@@ -1,0 +1,82 @@
+import express from 'express';
+import httpError from 'http-errors';
+import httpStatus from 'http-status';
+import paginate from 'express-paginate';
+
+import ordersRepository from '../repositories/orders.repository.js';
+import paginatedResponse from '../libs/paginatedResponse.js';
+
+const router = express.Router();
+
+class OrdersRoutes{
+
+    constructor() {
+        router.get('/', paginate.middleware(10, 30), this.getAll);
+        router.get('/:idOrder', this.getOneFromSpecificPizzeria);
+    }
+
+    async getAll(req, res, next) {
+
+        const retrieveOptions = {
+            skip:req.skip,
+            limit:req.query.limit,
+            topping:req.topping,
+        }
+
+        const filter = {};
+        if (req.query.topping) {
+            filter.topping = req.query.topping;
+        }
+
+        try {
+            let [orders, documentsCount] = await ordersRepository.retrieveAll(retrieveOptions, filter);
+            
+            orders = orders.map(o => {
+                o = o.toObject({getters:false, virtuals:false});
+                o = ordersRepository.transform(o);
+                return o;
+            });
+
+            const totalPages = Math.ceil(documentsCount/req.query.limit);
+
+            const pagination = {
+                totalPages,
+                hasNextPage: (paginate.hasNextPages(req))(totalPages),
+                pageArray: paginate.getArrayPages(req)(3, totalPages, req.query.page),
+                page: req.query.page,
+                limit: req.query.limit,
+                skip: req.skip,
+                totalDocuments: documentsCount
+            }
+            
+            const response = paginatedResponse(orders, pagination);
+            
+            res.status(httpStatus.OK).json(response);
+        } catch (err) {
+            return next(err);
+        }
+    }
+
+    async getOneFromSpecificPizzeria(req, res, next) {
+        try {
+            // const retrieveOptions = {};
+            // const transformOptions = { embed:{}};
+
+            // if(req.query.embed && req.query.embed === 'customer') {
+            //     retrieveOptions.customer = true;
+            //     transformOptions.embed.planet = true;
+            // }
+
+            // let order = await ordersRepository.RetrieveById(req.params.idOrder, retrieveOptions);
+            
+            // if(!order || order.pi)
+            res.status(httpStatus.OK).json(response);
+        } catch(err)
+        {
+            return next(err);
+        }
+    }
+}
+
+new OrdersRoutes();
+export default router;

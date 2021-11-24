@@ -4,9 +4,9 @@ import database from './libs/database.js';
 
 import errorMiddleware from './middlewares/errors.js';
 
-import pizzeriasRoutes from './routes/pizzaria.routes.js';
-import customersRoutes from './routes/customer.routes.js';
-import ordersRoutes from './routes/order.routes.js';
+import pizzeriasRoutes from './routes/pizzerias.routes.js';
+import customersRoutes from './routes/customers.routes.js';
+import ordersRoutes from './routes/orders.routes.js';
 
 database();
 
@@ -20,6 +20,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/pizzeria/:idPizzeria/orders',ordersRoutes);
 app.use('/pizzerias', pizzeriasRoutes);
 app.use('/customers', customersRoutes);
 app.use('/orders', ordersRoutes);
