@@ -32,10 +32,15 @@ class PizzeriaRepository{
         return retrieveQuery;
     }
 
+    create(pizzeria) {
+        return Pizzeria.create(pizzeria);
+    }
+
     transform(pizzeria, transformOptions = {}) {
 
         pizzeria.href = `/pizzerias/${pizzeria._id}`;
         delete pizzeria._id;
+        delete pizzeria.__v;
 
         pizzeria.lightspeed = `[${pizzeria.planet}]@(${pizzeria.coord.lat};${pizzeria.coord.lon})`;
         
