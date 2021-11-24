@@ -67,45 +67,6 @@ class PizzeriasRoutes {
             });
 
             const totalPages = Math.ceil(documentsCount / req.query.limit);
-<<<<<<< HEAD:src/routes/pizzaria.routes.js
-            const hasNextPage = (paginate.hasNextPages(req))(totalPages);
-            const pageArray = paginate.getArrayPages(req)(3, totalPages, req.query.page);
-
-            const response = {
-                _metadata: {
-                    hasNextPage,
-                    page: req.query.page,
-                    limit: req.query.limit,
-                    skip: req.skip,
-                    totalPages,
-                    totalDocuments: documentsCount
-                },
-                _links: {
-                    prev: (totalPages > 2 ? pageArray[0].url : undefined),
-                    self: (totalPages > 2 ? pageArray[1].url : pageArray[0].url),
-                    next: (totalPages > 2 ? pageArray[2].url : undefined)
-                },
-                data: pizzerias
-            };
-
-            if (totalPages > 1) {
-                if (req.query.page === 1) {
-                    delete response._links.prev;
-                    response._links.self = pageArray[0].url;
-                    response._links.next = pageArray[1].url;
-                }
-
-                if (!hasNextPage) {
-                    response._links.prev = (totalPages > 2 ? pageArray[1].url : pageArray[0].url);
-                    response._links.self = (totalPages > 2 ? pageArray[2].url : pageArray[1].url);
-                    delete response._links.next;
-                }
-            }
-            else {
-                delete response._links.prev;
-                delete response._links.next;
-            }
-=======
 
             const pagination = {
                 totalPages,
@@ -119,7 +80,6 @@ class PizzeriasRoutes {
 
             const response = paginatedResponse(pizzerias, pagination );
             
->>>>>>> 9bf12dcb2d926f6261b6865d6a148a928606b3ca:src/routes/pizzerias.routes.js
             res.status(httpStatus.OK).json(response);
         } catch (err) {
             return next(err);
