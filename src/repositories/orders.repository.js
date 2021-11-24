@@ -17,6 +17,12 @@ class OrderRepository{
         return Promise.all([retrieveQuery, countQuery]);
     }
 
+    retrieveById(idOrder, retrieveOptions = {}) {
+        const retrieveQuery = Order.findById(idOrder);
+
+        if(retr)
+    }
+
     transform(order, transformOptions = {}) {
         order.href = `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}/orders/${order._id}`;
         order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };

@@ -15,6 +15,7 @@ class PizzeriasRoutes {
     constructor() {
         router.get('/', paginate.middleware(25, 50), this.getAll);
         router.get('/:pizzeriaId', this.getOne);
+        router.get('/:pizzeria/orders/:idOrder', this.getOneOrderFromSpecificPizzeria);
         router.post('/', this.post)
     }
 
@@ -90,6 +91,31 @@ class PizzeriasRoutes {
         
     }
 
+    async getOneOrderFromSpecificPizzeria(req, res, next) {
+        try {
+            const retrieveOptions = {};
+            const transformOptions = { embed:{}};
+
+            if(req.query.embed && req.query.embed === 'customer') {
+                retrieveOptions.customer = true;
+                transformOptions.embed.customer = true;
+            }
+
+            let order = await ordersRepository.RetrieveById(req.params.idOrder, retrieveOptions);
+
+            if(!order || order.pizzeria !== req.params.idPizzeria) {
+                return next(httpError.NotFound('La pizzeria ou la commande spécifique n’existe pas'));
+            }
+
+            order = order.toObject({getters:false, virtuals: true});
+            order = order.ordersRepository.transform(order, transformOptions);
+
+            res.status(httpStatus.OK).json(response);
+        } catch(err)
+        {
+            return next(err);
+        }
+    }
 }
 
 new PizzeriasRoutes();

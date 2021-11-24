@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import Pizzeria from '../models/pizzeria.model.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
-import orderRepository from './order.repository.js';
+import ordersRepository from './orders.repository.js';
 
 class PizzeriaRepository{
     retrieveAll(retrieveOptions, filter = {}) {
@@ -11,12 +11,12 @@ class PizzeriaRepository{
 
         if(filter.speciality)
         {
-            retrieveQuery = Pizzeria.find({'chef.speciality':filter.speciality}).skip(retrieveOptions.skip).limit(retrieveOptions.limit);
+            retrieveQuery = Pizzeria.find({'chef.speciality':filter.speciality}).skip(retrieveOptions.skip).limit(retrieveOptions.limit).sort('chef.name');
             countQuery = Pizzeria.countDocuments({'chef.speciality':filter.speciality});
         }
         else
         {
-            retrieveQuery = Pizzeria.find().skip(retrieveOptions.skip).limit(retrieveOptions.limit);
+            retrieveQuery = Pizzeria.find().skip(retrieveOptions.skip).limit(retrieveOptions.limit).sort('chef.name');
             countQuery = Pizzeria.countDocuments();
         }
         
