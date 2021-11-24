@@ -28,6 +28,10 @@ class CustomerRepository{
         return Customer.findByIdAndUpdate(idCustomer, objectToDotNotation(customerModifs), {new:true});
     }
 
+    retrieveAll(){
+        
+    }
+
     retrieveById(idCustomer, retrieveOptions) {
         const retrieveQuery = Customer.findById(idCustomer);
 

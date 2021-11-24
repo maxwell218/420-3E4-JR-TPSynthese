@@ -37,6 +37,7 @@ class PizzeriasRoutes {
             pizzeria = pizzeria.toObject({ getters: false, virtuals: true });
             pizzeria = pizzeriaRepository.transform(pizzeria, transformOptions);
 
+
             res.status(httpStatus.OK).json(pizzeria);
 
         } catch (err) {
@@ -80,7 +81,6 @@ class PizzeriasRoutes {
             const response = paginatedResponse(pizzerias, pagination );
             
             res.status(httpStatus.OK).json(response);
-
         } catch (err) {
             return next(err);
         }

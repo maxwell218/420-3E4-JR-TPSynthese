@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import Pizzeria from '../models/pizzeria.model.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
+import orderRepository from './order.repository.js';
 
 class PizzeriaRepository{
     retrieveAll(retrieveOptions, filter = {}) {
@@ -43,6 +44,13 @@ class PizzeriaRepository{
         delete pizzeria.__v;
 
         pizzeria.lightspeed = `[${pizzeria.planet}]@(${pizzeria.coord.lat};${pizzeria.coord.lon})`;
+
+        if(transformOptions.embed && transformOptions.embed.orders){
+            pizzeria.orders = pizzeria.orders.map(o =>{
+                o = orderRepository.transform(o, transformOptions);
+                return o;
+            });
+        }
         
         return pizzeria;
     }
