@@ -15,12 +15,6 @@ class CustomerRepository{
                 order = orderRepository.transform(order, transformOptions);
                 return order;
             });
-        } else {
-            // TODO fix
-            customer.orders = customer.orders.map(order => {
-                order = { href: `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}/orders/${order._id}` }
-                return order;
-            });
         }
 
         customer.href = `${process.env.BASE_URL}/customers/${customer._id}`;

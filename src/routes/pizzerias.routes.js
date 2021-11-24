@@ -15,6 +15,7 @@ class PizzeriasRoutes {
     constructor() {
         router.get('/', paginate.middleware(25, 50), this.getAll);
         router.get('/:pizzeriaId', this.getOne);
+        router.post('/', this.post)
     }
 
     async getOne(req, res, next) {
@@ -83,6 +84,10 @@ class PizzeriasRoutes {
         } catch (err) {
             return next(err);
         }
+    }
+
+    async post(req, res, next) {
+        
     }
 
 }
