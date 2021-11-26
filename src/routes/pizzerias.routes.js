@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import paginate from 'express-paginate';
 
 import pizzeriaRepository from '../repositories/pizzerias.repository.js';
+import ordersRepository from '../repositories/orders.repository.js';
 import pizzeriaValidator from '../validators/pizzeria.validator.js';
 import validator from '../middlewares/validator.js';
 import paginatedResponse from '../libs/paginatedResponse.js';
@@ -15,7 +16,7 @@ class PizzeriasRoutes {
     constructor() {
         router.get('/', paginate.middleware(25, 50), this.getAll);
         router.get('/:pizzeriaId', this.getOne);
-        router.get('/:pizzeria/orders/:idOrder', this.getOneOrderFromSpecificPizzeria);
+        router.get('/:pizzeriaId/orders/:orderId', this.getOneOrderFromSpecificPizzeria);
         router.post('/', pizzeriaValidator.complete(), validator, this.post);
     }
 
@@ -115,6 +116,7 @@ class PizzeriasRoutes {
     async getOneOrderFromSpecificPizzeria(req, res, next) {
         try {
             const retrieveOptions = {};
+            retrieveOptions.pizzeriaId = req.params.pizzeriaId;
             const transformOptions = { embed:{}};
 
             if(req.query.embed && req.query.embed === 'customer') {
@@ -122,16 +124,16 @@ class PizzeriasRoutes {
                 transformOptions.embed.customer = true;
             }
 
-            let order = await ordersRepository.RetrieveById(req.params.idOrder, retrieveOptions);
+            let order = await ordersRepository.retrieveById(req.params.orderId, retrieveOptions);
 
-            if(!order || order.pizzeria !== req.params.idPizzeria) {
+            if(!order) {
                 return next(httpError.NotFound('La pizzeria ou la commande spécifique n’existe pas'));
             }
 
             order = order.toObject({getters:false, virtuals: true});
-            order = order.ordersRepository.transform(order, transformOptions);
+            order = ordersRepository.transform(order, transformOptions);
 
-            res.status(httpStatus.OK).json(response);
+            res.status(httpStatus.OK).json(order);
         } catch(err)
         {
             return next(err);

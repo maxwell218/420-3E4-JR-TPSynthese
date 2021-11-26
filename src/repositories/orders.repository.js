@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import Order from '../models/order.model.js';
+import customersRepository from './customers.repository.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
 import { parse } from 'dotenv-flow';
 
@@ -18,27 +19,40 @@ class OrderRepository{
     }
 
     retrieveById(idOrder, retrieveOptions = {}) {
-        const retrieveQuery = Order.findById(idOrder);
+        let retrieveQuery;
 
-        if(retr)
+        retrieveQuery = Order.findById(idOrder).and((retrieveOptions.pizzeriaId?{'pizzeria' : retrieveOptions.pizzeriaId}:{}));
+
+        if(retrieveOptions.customer) {
+            retrieveQuery.populate('customers');
+        }
+        return retrieveQuery;
     }
+    
 
     transform(order, transformOptions = {}) {
         order.href = `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}/orders/${order._id}`;
-        order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
         order.pizzeria = { href: `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}`};
-        delete order._id;
+
+        if(transformOptions.embed && transformOptions.embed.customer)
+        {
+            order.customer = customersRepository.transform(order.customer, transformOptions);
+        } else {
+            order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
+        }
+        
 
         order.subTotal = 0;
         order.pizzas.forEach(p => {
             order.subTotal += p.price;
         });
         order.subTotal = parseFloat(order.subTotal.toFixed(3));
-
+        
         order.taxeRates = 0.87 / 100;
         order.taxes = parseFloat((order.subTotal*order.taxeRates).toFixed(3));
         order.total = order.subTotal + order.taxes;
-
+        
+        delete order._id;
         return order;
     }
 }
