@@ -24,7 +24,7 @@ class OrderRepository{
         retrieveQuery = Order.findById(idOrder).and((retrieveOptions.pizzeriaId?{'pizzeria' : retrieveOptions.pizzeriaId}:{}));
 
         if(retrieveOptions.customer) {
-            retrieveQuery.populate('customers');
+            retrieveQuery.populate('customer');
         }
         return retrieveQuery;
     }
