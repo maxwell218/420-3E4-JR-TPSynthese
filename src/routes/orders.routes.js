@@ -12,7 +12,6 @@ class OrdersRoutes{
 
     constructor() {
         router.get('/', paginate.middleware(10, 30), this.getAll);
-        router.get('/:idOrder', this.getOneFromSpecificPizzeria);
     }
 
     async getAll(req, res, next) {
@@ -53,26 +52,6 @@ class OrdersRoutes{
             
             res.status(httpStatus.OK).json(response);
         } catch (err) {
-            return next(err);
-        }
-    }
-
-    async getOneFromSpecificPizzeria(req, res, next) {
-        try {
-            // const retrieveOptions = {};
-            // const transformOptions = { embed:{}};
-
-            // if(req.query.embed && req.query.embed === 'customer') {
-            //     retrieveOptions.customer = true;
-            //     transformOptions.embed.planet = true;
-            // }
-
-            // let order = await ordersRepository.RetrieveById(req.params.idOrder, retrieveOptions);
-            
-            // if(!order || order.pi)
-            res.status(httpStatus.OK).json(response);
-        } catch(err)
-        {
             return next(err);
         }
     }

@@ -11,12 +11,12 @@ class PizzeriaRepository{
 
         if(filter.speciality)
         {
-            retrieveQuery = Pizzeria.find({'chef.speciality':filter.speciality}).skip(retrieveOptions.skip).limit(retrieveOptions.limit);
+            retrieveQuery = Pizzeria.find({'chef.speciality':filter.speciality}).skip(retrieveOptions.skip).limit(retrieveOptions.limit).sort('chef.name');
             countQuery = Pizzeria.countDocuments({'chef.speciality':filter.speciality});
         }
         else
         {
-            retrieveQuery = Pizzeria.find().skip(retrieveOptions.skip).limit(retrieveOptions.limit);
+            retrieveQuery = Pizzeria.find().skip(retrieveOptions.skip).limit(retrieveOptions.limit).sort('chef.name');
             countQuery = Pizzeria.countDocuments();
         }
         
@@ -33,10 +33,15 @@ class PizzeriaRepository{
         return retrieveQuery;
     }
 
+    create(pizzeria) {
+        return Pizzeria.create(pizzeria);
+    }
+
     transform(pizzeria, transformOptions = {}) {
 
         pizzeria.href = `/pizzerias/${pizzeria._id}`;
         delete pizzeria._id;
+        delete pizzeria.__v;
 
         pizzeria.lightspeed = `[${pizzeria.planet}]@(${pizzeria.coord.lat};${pizzeria.coord.lon})`;
 

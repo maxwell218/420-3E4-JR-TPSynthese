@@ -120,7 +120,7 @@ class CustomersRoutes {
             let customer = await customerRepository.retrieveById(idCustomer, retrieveOptions);
 
             if (!customer) {
-                return next(HttpError.NotFound());
+                return next(httpError.NotFound());
             }
 
             customer = customer.toObject({ getters: false, virtuals: true });
