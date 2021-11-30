@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import Pizzeria from '../models/pizzeria.model.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
-import orderRepository from './order.repository.js';
+import orderRepository from './orders.repository.js';
 
 class PizzeriaRepository{
     retrieveAll(retrieveOptions, filter = {}) {

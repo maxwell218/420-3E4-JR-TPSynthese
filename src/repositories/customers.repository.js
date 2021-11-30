@@ -28,8 +28,19 @@ class CustomerRepository{
         return Customer.findByIdAndUpdate(idCustomer, objectToDotNotation(customerModifs), {new:true});
     }
 
-    retrieveAll(){
-        
+    retrieveAll(retrieveOptions, filter = {}){
+        let retrieveQuery;
+        let countQuery;
+
+        if(filter.planet){    
+            retrieveQuery = Customer.find({'planet':filter.planet}).skip(retrieveOptions.skip).limit(retrieveOptions.limit).sort('birthday');
+            countQuery = Customer.countDocuments({'planet':filter.planet});
+        }else{
+
+            retrieveQuery = Customer.find().skip(retrieveOptions.skip).limit(retrieveOptions.limit).sort('birthday');
+            countQuery = Customer.estimatedDocumentCount(); 
+        }
+        return Promise.all([retrieveQuery, countQuery]);
     }
 
     retrieveById(idCustomer, retrieveOptions) {
