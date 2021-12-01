@@ -19,6 +19,7 @@ class CustomerRepository{
 
         customer.href = `${process.env.BASE_URL}/customers/${customer._id}`;
         delete customer._id;
+        delete customer.__v;
 
         return customer;
     }
