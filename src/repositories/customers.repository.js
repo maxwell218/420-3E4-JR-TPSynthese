@@ -9,7 +9,6 @@ class CustomerRepository{
     }
 
     transform(customer, transformOptions = {}) {
-        console.log(customer);
         if (transformOptions.embed && transformOptions.embed.orders) {
             customer.orders = customer.orders.map(order => {
                 order = orderRepository.transform(order, transformOptions);
@@ -18,6 +17,7 @@ class CustomerRepository{
         }
 
         customer.href = `${process.env.BASE_URL}/customers/${customer._id}`;
+        delete customer.id;
         delete customer._id;
         delete customer.__v;
 

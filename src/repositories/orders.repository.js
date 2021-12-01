@@ -41,6 +41,10 @@ class OrderRepository{
             order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
         }
         
+        order.pizzas.forEach(pizza => {
+            delete pizza._id;
+            delete pizza.id;
+        });
 
         order.subTotal = 0;
         order.pizzas.forEach(p => {
@@ -53,6 +57,7 @@ class OrderRepository{
         order.total = order.subTotal + order.taxes;
         
         delete order._id;
+        delete order.id;
         return order;
     }
 }
