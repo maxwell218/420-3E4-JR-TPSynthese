@@ -16,6 +16,10 @@ class CustomerRepository{
             });
         }
 
+        customer.age = dayjs().diff(dayjs(customer.birthday), 'year');
+
+        customer.lightspeed = `[${customer.planet}]@(${customer.coord.lat};${customer.coord.lon})`
+
         customer.href = `${process.env.BASE_URL}/customers/${customer._id}`;
         delete customer.id;
         delete customer._id;
@@ -37,7 +41,6 @@ class CustomerRepository{
             retrieveQuery = Customer.find({'planet':filter.planet}).skip(retrieveOptions.skip).limit(retrieveOptions.limit).sort('birthday');
             countQuery = Customer.countDocuments({'planet':filter.planet});
         }else{
-
             retrieveQuery = Customer.find().skip(retrieveOptions.skip).limit(retrieveOptions.limit).sort('birthday');
             countQuery = Customer.estimatedDocumentCount(); 
         }

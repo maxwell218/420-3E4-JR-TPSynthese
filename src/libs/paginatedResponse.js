@@ -1,7 +1,17 @@
 
 export default (data, pagination) => {
 
-    const response = {
+    console.log(data);
+    if (data.length === 0) {
+
+        return {
+            _metadata: {},
+            _links: {},
+            data
+        };
+    }
+
+    let response = {
         _metadata: {
             hasNextPage: pagination.hasNextPage,
             page: pagination.page,

@@ -54,7 +54,7 @@ class OrderRepository{
         
         order.taxeRates = 0.87 / 100;
         order.taxes = parseFloat((order.subTotal*order.taxeRates).toFixed(3));
-        order.total = order.subTotal + order.taxes;
+        order.total = parseFloat((order.subTotal + order.taxes).toFixed(3));
         
         delete order._id;
         delete order.id;
